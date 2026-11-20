@@ -1,0 +1,74 @@
+table 'dw dim_payer'
+	lineageTag: 192d9767-3c4d-41bf-acb3-f071198259cc
+
+	column payer_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 323ec71d-b440-4bf1-8fd2-eb7603f00ee4
+		summarizeBy: none
+		sourceColumn: payer_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payer_id
+		dataType: int64
+		formatString: 0
+		lineageTag: c25420b2-82e0-4ae6-b4d4-cee9ac989e5d
+		summarizeBy: sum
+		sourceColumn: payer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payer_code
+		dataType: string
+		lineageTag: 4574d78d-6116-4213-8e2d-f5e7189895c7
+		summarizeBy: none
+		sourceColumn: payer_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column payer_name
+		dataType: string
+		lineageTag: 04d1c1af-a8be-4080-9e1b-7ea5542729e6
+		summarizeBy: none
+		sourceColumn: payer_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column payer_type
+		dataType: string
+		lineageTag: 54bf7c02-b387-427f-b7e6-1e6f37bae435
+		summarizeBy: none
+		sourceColumn: payer_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 284b7d82-f945-4fb6-b938-576a3ff46cd2
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9616a369-a5df-43bf-969c-4917a06ab1d9
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw dim_payer' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost", "MedicalBilling_DW"),
+				    dw_dim_payer = Source{[Schema="dw",Item="dim_payer"]}[Data]
+				in
+				    dw_dim_payer
+
+	annotation PBI_ResultType = Table
+

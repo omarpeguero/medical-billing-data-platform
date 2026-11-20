@@ -1,0 +1,158 @@
+table 'dw fact_claim_events'
+	lineageTag: 48055786-d7d4-4c77-a807-b3de4d7a7781
+
+	column claim_event_id
+		dataType: int64
+		formatString: 0
+		lineageTag: bbc17ab2-4926-408e-bcb4-5459e3b2b970
+		summarizeBy: sum
+		sourceColumn: claim_event_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 3f5945ff-9043-49b6-a979-13a7348dcbf6
+		summarizeBy: sum
+		sourceColumn: claim_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_line_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6d43d311-8444-415a-a40f-f31be390a758
+		summarizeBy: sum
+		sourceColumn: claim_line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column client_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 210759f8-3d0f-4f99-a6c2-a8ed6db58206
+		summarizeBy: none
+		sourceColumn: client_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 6212b750-579f-499f-90b1-8532a37594c6
+		summarizeBy: none
+		sourceColumn: provider_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payer_key
+		dataType: int64
+		formatString: 0
+		lineageTag: f7ff0c33-f750-47dd-8f35-871ce53f0a63
+		summarizeBy: none
+		sourceColumn: payer_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 7b117fdd-e1aa-4e82-b4f2-752d33e22848
+		summarizeBy: sum
+		sourceColumn: event_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0106ac5d-274e-4b4b-8514-888ac29776d4
+		summarizeBy: none
+		sourceColumn: event_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_type
+		dataType: string
+		lineageTag: 8c6fa364-a278-4e15-9008-eab5e0b10c7a
+		summarizeBy: none
+		sourceColumn: event_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column reason_code
+		dataType: string
+		lineageTag: b0887d0e-ac23-4c11-9c31-63397d7aa1a4
+		summarizeBy: none
+		sourceColumn: reason_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column reason_description
+		dataType: string
+		lineageTag: 5fa24341-a23b-45a7-a179-6a654585cdad
+		summarizeBy: none
+		sourceColumn: reason_description
+
+		annotation SummarizationSetBy = Automatic
+
+	column submission_reference
+		dataType: string
+		lineageTag: 5031ce3f-113e-4c3a-8518-de35b3bfe92b
+		summarizeBy: none
+		sourceColumn: submission_reference
+
+		annotation SummarizationSetBy = Automatic
+
+	column notes
+		dataType: string
+		lineageTag: e0e23965-67ca-4f0a-a36f-046af8dacdbc
+		summarizeBy: none
+		sourceColumn: notes
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 89c0ba49-c25d-468f-8f04-d233c13716ef
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 058ac230-7091-4a10-8336-0c4155c9e2b0
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _source_change_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0c08a8ed-8e49-43ba-be7f-05b82a7eaa5f
+		summarizeBy: none
+		sourceColumn: _source_change_at
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Denial / rejection reason code with description
+	column Reason = IF(NOT ISBLANK('dw fact_claim_events'[reason_code]), 'dw fact_claim_events'[reason_code] & " · " & 'dw fact_claim_events'[reason_description])
+		dataType: string
+		lineageTag: ee0caeab-2d2e-459a-b1bc-604227986889
+
+	partition 'dw fact_claim_events' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost", "MedicalBilling_DW"),
+				    dw_fact_claim_events = Source{[Schema="dw",Item="fact_claim_events"]}[Data]
+				in
+				    dw_fact_claim_events
+
+	annotation PBI_ResultType = Table
+

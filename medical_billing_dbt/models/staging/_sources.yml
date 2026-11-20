@@ -1,0 +1,16 @@
+version: 2
+sources:
+  - name: emr
+    database: MedicalBilling_DW
+    schema: raw
+    tables:
+      - name: clients
+      - name: providers
+      - name: payers
+      - name: service_codes
+      - name: billing_entries
+      - name: claims
+      - name: claim_lines
+      - name: claim_events
+      - name: payments
+      - name: adjustments

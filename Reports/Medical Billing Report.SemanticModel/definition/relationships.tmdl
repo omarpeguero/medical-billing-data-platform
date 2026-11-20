@@ -1,0 +1,128 @@
+relationship AutoDetected_3c027d14-69ce-4ce5-a8e5-7d770dd7f164
+	fromColumn: 'dw fact_adjustments'.client_key
+	toColumn: 'dw dim_client'.client_key
+
+relationship AutoDetected_356c50ce-4bad-4bf3-894c-7f226582b0ab
+	fromColumn: 'dw fact_billing'.client_key
+	toColumn: 'dw dim_client'.client_key
+
+relationship AutoDetected_3cf1861f-6673-4923-b9c8-f1037f000da8
+	fromColumn: 'dw fact_claim_events'.client_key
+	toColumn: 'dw dim_client'.client_key
+
+relationship AutoDetected_359a20f0-3e69-494a-bac1-81a93a746efa
+	fromColumn: 'dw fact_claim_financials'.client_key
+	toColumn: 'dw dim_client'.client_key
+
+relationship AutoDetected_97f09355-b5ac-4e4a-911d-45c406a7ff08
+	fromColumn: 'dw fact_payments'.client_key
+	toColumn: 'dw dim_client'.client_key
+
+relationship AutoDetected_5fed635f-9703-425d-a5c6-8207efe883af
+	fromColumn: 'dw fact_adjustments'.payer_key
+	toColumn: 'dw dim_payer'.payer_key
+
+relationship AutoDetected_08300315-2767-42e0-94f3-bcd16dd2b46f
+	fromColumn: 'dw fact_billing'.payer_key
+	toColumn: 'dw dim_payer'.payer_key
+
+relationship AutoDetected_d66fd1d2-d54d-4af1-a081-e6bd84ccbf34
+	fromColumn: 'dw fact_claim_events'.payer_key
+	toColumn: 'dw dim_payer'.payer_key
+
+relationship AutoDetected_4cefd29e-90e4-414e-97e3-00f6b5c3ff68
+	fromColumn: 'dw fact_claim_financials'.payer_key
+	toColumn: 'dw dim_payer'.payer_key
+
+relationship AutoDetected_614bacf8-3d64-4822-ac17-50d0b09bd823
+	fromColumn: 'dw fact_adjustments'.provider_key
+	toColumn: 'dw dim_provider'.provider_key
+
+relationship AutoDetected_da59adc8-ab91-47cf-9d8b-ff3967562b42
+	fromColumn: 'dw fact_billing'.provider_key
+	toColumn: 'dw dim_provider'.provider_key
+
+relationship AutoDetected_d3d59aad-3dd6-41f2-b92f-b618e8c1934a
+	fromColumn: 'dw fact_claim_events'.provider_key
+	toColumn: 'dw dim_provider'.provider_key
+
+relationship AutoDetected_c71924d7-780f-4543-937a-13f97f0fe60f
+	fromColumn: 'dw fact_claim_financials'.provider_key
+	toColumn: 'dw dim_provider'.provider_key
+
+relationship AutoDetected_54ebe91e-472c-446d-850e-da3097a9ae7c
+	fromColumn: 'dw fact_payments'.provider_key
+	toColumn: 'dw dim_provider'.provider_key
+
+relationship AutoDetected_6e85dc94-23e2-4610-93f4-d94a876690f1
+	fromColumn: 'dw fact_adjustments'.service_key
+	toColumn: 'dw dim_service'.service_key
+
+relationship AutoDetected_9b0d48c0-78c8-429e-8d8b-67ef8f9fad4e
+	fromColumn: 'dw fact_billing'.service_key
+	toColumn: 'dw dim_service'.service_key
+
+relationship AutoDetected_5af1829b-0602-4e37-9587-305addaaefbe
+	fromColumn: 'dw fact_claim_financials'.service_key
+	toColumn: 'dw dim_service'.service_key
+
+relationship AutoDetected_b9bfd33b-d4b5-4af9-a285-8e12d41c0026
+	fromColumn: 'dw fact_payments'.service_key
+	toColumn: 'dw dim_service'.service_key
+
+relationship AutoDetected_91fbde29-c050-4a22-a865-404dba4f3f5a
+	isActive: false
+	fromColumn: 'dw fact_adjustments'.claim_line_id
+	toColumn: 'dw fact_billing'.claim_line_id
+
+relationship AutoDetected_16201cd1-dd02-4a8c-86c2-39e33505439f
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'dw fact_claim_financials'.claim_line_id
+	toColumn: 'dw fact_billing'.claim_line_id
+
+relationship AutoDetected_f6249b54-6651-4562-9329-15242eb73a2e
+	isActive: false
+	fromColumn: 'dw fact_payments'.claim_line_id
+	toColumn: 'dw fact_billing'.claim_line_id
+
+relationship AutoDetected_0a06f40d-7538-4982-8a98-acec2e887748
+	isActive: false
+	fromColumn: 'dw fact_adjustments'.billing_entry_id
+	toColumn: 'dw fact_claim_financials'.billing_entry_id
+
+relationship AutoDetected_edabb395-84bb-4bf5-8c5c-7c63ac8e47d5
+	isActive: false
+	fromColumn: 'dw fact_payments'.billing_entry_id
+	toColumn: 'dw fact_claim_financials'.billing_entry_id
+
+relationship 917fc2a4-36c2-4fd9-a789-1520be7517a8
+	fromColumn: 'dw fact_billing'.service_date_key
+	toColumn: 'dw dim_date'.date_key
+
+relationship 530cbf8a-a0e1-4040-9848-ea2767981f3d
+	fromColumn: 'dw fact_claim_financials'.service_date_key
+	toColumn: 'dw dim_date'.date_key
+
+relationship ea62c789-96dc-4f8b-b36e-3f46243bbbfa
+	fromColumn: 'dw fact_payments'.payment_date_key
+	toColumn: 'dw dim_date'.date_key
+
+relationship 432d137e-e0fe-4bc2-8973-ff5da60e1c80
+	fromColumn: 'dw fact_adjustments'.adjustment_date_key
+	toColumn: 'dw dim_date'.date_key
+
+relationship 38566157-5b0e-414d-a51d-ef20092f9769
+	fromColumn: 'dw fact_claim_events'.event_date_key
+	toColumn: 'dw dim_date'.date_key
+
+relationship 886d5ff6-39d9-43ce-a406-0260fdd5414b
+	fromColumn: 'dw fact_payments'.claim_payer_key
+	toColumn: 'dw dim_payer'.payer_key
+
+relationship 69383ff0-d2a4-4845-94ab-85811adbb9ae
+	isActive: false
+	fromColumn: 'dw fact_payments'.payment_payer_key
+	toColumn: 'dw dim_payer'.payer_key
+

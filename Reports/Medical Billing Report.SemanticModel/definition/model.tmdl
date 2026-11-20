@@ -1,0 +1,31 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-VI
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["dw dim_client","dw dim_date","dw dim_payer","dw dim_provider","dw dim_service","dw fact_adjustments","dw fact_billing","dw fact_claim_events","dw fact_claim_financials","dw fact_payments"]
+
+annotation PBI_ProTooling = ["DevMode","MCP-PBIModeling"]
+
+ref table 'dw dim_client'
+ref table 'dw dim_date'
+ref table 'dw dim_payer'
+ref table 'dw dim_provider'
+ref table 'dw dim_service'
+ref table 'dw fact_adjustments'
+ref table 'dw fact_billing'
+ref table 'dw fact_claim_events'
+ref table 'dw fact_claim_financials'
+ref table 'dw fact_payments'
+ref table _Measures
+ref table 'Waterfall Step'
+ref table 'Days Since Service'
+
+ref cultureInfo en-US
+

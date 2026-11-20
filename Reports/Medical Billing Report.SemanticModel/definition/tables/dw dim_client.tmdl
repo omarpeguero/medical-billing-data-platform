@@ -1,0 +1,117 @@
+table 'dw dim_client'
+	lineageTag: 1d4d14b0-62e4-432b-89eb-ae93b20db217
+
+	column client_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 0be07cb2-2f8e-4e9f-8180-516ad197b700
+		summarizeBy: none
+		sourceColumn: client_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column client_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 71b2f7e2-6ceb-45e4-abcb-6d5de229a968
+		summarizeBy: sum
+		sourceColumn: client_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column client_number
+		dataType: string
+		lineageTag: a18d1ce3-8ebc-4ab5-aefb-260d4e0797a6
+		summarizeBy: none
+		sourceColumn: client_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_name
+		dataType: string
+		lineageTag: d766365f-5f00-492b-83d7-4615b491b1ea
+		summarizeBy: none
+		sourceColumn: first_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_name
+		dataType: string
+		lineageTag: 83c8226c-ccfb-4fb2-bf31-1fe82e85f8ad
+		summarizeBy: none
+		sourceColumn: last_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column client_name
+		dataType: string
+		lineageTag: 210b91d8-5e68-43d8-8cd2-fd2f0ae0da33
+		summarizeBy: none
+		sourceColumn: client_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_of_birth
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f68733e9-7aad-4bdf-9e07-d4259bb5b1ae
+		summarizeBy: none
+		sourceColumn: date_of_birth
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column state_code
+		dataType: string
+		lineageTag: d970c01d-76fa-42ca-a478-8e2608b5bf2d
+		summarizeBy: none
+		sourceColumn: state_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column postal_code
+		dataType: string
+		lineageTag: 9c63338c-dba4-4110-914f-3139c4d63e56
+		summarizeBy: none
+		sourceColumn: postal_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column client_status
+		dataType: string
+		lineageTag: fbe0e583-d75d-4b7a-ba14-65492e24201c
+		summarizeBy: none
+		sourceColumn: client_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e863bb83-926b-4a12-ab19-7ae023b4ddca
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: beba5ae9-28df-4b3a-81a4-9c799f94e1ae
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw dim_client' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost", "MedicalBilling_DW"),
+				    dw_dim_client = Source{[Schema="dw",Item="dim_client"]}[Data]
+				in
+				    dw_dim_client
+
+	annotation PBI_ResultType = Table
+

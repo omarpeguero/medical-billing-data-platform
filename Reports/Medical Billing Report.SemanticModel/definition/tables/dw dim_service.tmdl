@@ -1,0 +1,114 @@
+table 'dw dim_service'
+	lineageTag: 25cfa6b6-4b51-4456-802f-595c6ef3cef3
+
+	column service_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 557b7253-aa34-468d-a6c9-67b5b5d4a772
+		summarizeBy: none
+		sourceColumn: service_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_code_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 74040874-da4f-41b1-b917-6e59472c172a
+		summarizeBy: sum
+		sourceColumn: service_code_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column code_system
+		dataType: string
+		lineageTag: 70473f29-1a05-43c7-90c5-91169b11185e
+		summarizeBy: none
+		sourceColumn: code_system
+
+		annotation SummarizationSetBy = Automatic
+
+	column procedure_code
+		dataType: string
+		lineageTag: 319e6a7b-02c7-4a9b-9045-c7f5355675a8
+		summarizeBy: none
+		sourceColumn: procedure_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_description
+		dataType: string
+		lineageTag: 6e484a3e-9dd0-413f-b119-6b35a743f6cf
+		summarizeBy: none
+		sourceColumn: service_description
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_type
+		dataType: string
+		lineageTag: 6df5bc7a-b592-4c39-8e06-640b82314493
+		summarizeBy: none
+		sourceColumn: unit_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column default_charge_per_unit
+		dataType: double
+		lineageTag: cb943ac0-89fc-4662-befd-b1cda143e3fb
+		summarizeBy: sum
+		sourceColumn: default_charge_per_unit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column effective_from
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cd4eea85-cf55-404a-a99d-5e73de3bd597
+		summarizeBy: none
+		sourceColumn: effective_from
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column effective_to
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3411fd5e-609e-4995-959e-6b16421b20a6
+		summarizeBy: none
+		sourceColumn: effective_to
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 349e66bd-20bd-4124-8f01-fb7b1e0f8ea6
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f87465e3-7c12-485a-898a-dd79928ef285
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw dim_service' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost", "MedicalBilling_DW"),
+				    dw_dim_service = Source{[Schema="dw",Item="dim_service"]}[Data]
+				in
+				    dw_dim_service
+
+	annotation PBI_ResultType = Table
+

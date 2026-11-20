@@ -1,0 +1,183 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "fcb0541781574b3dbf32",
+  "position": {
+    "x": 772,
+    "y": 464,
+    "z": 13000,
+    "height": 236,
+    "width": 488,
+    "tabOrder": 13000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dw fact_claim_events"
+                    }
+                  },
+                  "Property": "Reason"
+                }
+              },
+              "queryRef": "dw fact_claim_events.Reason",
+              "nativeQueryRef": "Reason",
+              "displayName": "Reason"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Claims Denied"
+                }
+              },
+              "queryRef": "_Measures.Claims Denied",
+              "nativeQueryRef": "Claims Denied",
+              "displayName": "Denied"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Denial Recovery Rate"
+                }
+              },
+              "queryRef": "_Measures.Denial Recovery Rate",
+              "nativeQueryRef": "Denial Recovery Rate",
+              "displayName": "Recovered"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Denied $ Still Open"
+                }
+              },
+              "queryRef": "_Measures.Denied $ Still Open",
+              "nativeQueryRef": "Denied $ Still Open",
+              "displayName": "Still open"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Measures"
+                  }
+                },
+                "Property": "Denied $ Still Open"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Recoverable opportunity by reason'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "fd2544846017dac992a2",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dw fact_claim_events"
+              }
+            },
+            "Property": "Reason"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "f4a600f4bc68c78568fa",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Claims Denied"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "596241c4b97ac56f9a94",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Denial Recovery Rate"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "a792b3703ac403e89984",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Denied $ Still Open"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

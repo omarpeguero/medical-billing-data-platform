@@ -1,0 +1,222 @@
+version: 2
+models:
+- name: dim_client
+  description: Warehouse dimension; grain is unique client_key.
+  columns:
+  - name: client_key
+    data_tests:
+    - not_null
+    - unique
+- name: dim_provider
+  description: Warehouse dimension; grain is unique provider_key.
+  columns:
+  - name: provider_key
+    data_tests:
+    - not_null
+    - unique
+- name: dim_payer
+  description: Warehouse dimension; grain is unique payer_key.
+  columns:
+  - name: payer_key
+    data_tests:
+    - not_null
+    - unique
+- name: dim_service
+  description: Warehouse dimension; grain is unique service_key.
+  columns:
+  - name: service_key
+    data_tests:
+    - not_null
+    - unique
+- name: dim_date
+  description: Warehouse dimension; grain is unique date_key.
+  columns:
+  - name: date_key
+    data_tests:
+    - not_null
+    - unique
+- name: fact_billing
+  description: Warehouse transaction fact; grain is unique billing_entry_id.
+  columns:
+  - name: billing_entry_id
+    data_tests:
+    - not_null
+    - unique
+  - name: client_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_client')
+          field: client_key
+  - name: provider_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_provider')
+          field: provider_key
+  - name: service_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_service')
+          field: service_key
+  - name: payer_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_payer')
+          field: payer_key
+  - name: service_date_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_date')
+          field: date_key
+- name: fact_claim_financials
+  description: Current-state claim line finance, not historical balance snapshot.
+  columns:
+  - name: claim_line_id
+    data_tests:
+    - not_null
+    - unique
+  - name: client_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_client')
+          field: client_key
+  - name: provider_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_provider')
+          field: provider_key
+  - name: payer_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_payer')
+          field: payer_key
+  - name: service_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_service')
+          field: service_key
+  - name: service_date_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_date')
+          field: date_key
+- name: fact_payments
+  description: Warehouse transaction fact; grain is unique payment_id.
+  columns:
+  - name: payment_id
+    data_tests:
+    - not_null
+    - unique
+  - name: client_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_client')
+          field: client_key
+  - name: provider_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_provider')
+          field: provider_key
+  - name: service_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_service')
+          field: service_key
+  - name: claim_payer_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_payer')
+          field: payer_key
+  - name: payment_payer_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_payer')
+          field: payer_key
+  - name: payment_date_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_date')
+          field: date_key
+- name: fact_adjustments
+  description: Warehouse transaction fact; grain is unique adjustment_id.
+  columns:
+  - name: adjustment_id
+    data_tests:
+    - not_null
+    - unique
+  - name: client_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_client')
+          field: client_key
+  - name: provider_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_provider')
+          field: provider_key
+  - name: payer_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_payer')
+          field: payer_key
+  - name: service_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_service')
+          field: service_key
+  - name: adjustment_date_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_date')
+          field: date_key
+- name: fact_claim_events
+  description: Warehouse transaction fact; grain is unique claim_event_id.
+  columns:
+  - name: claim_event_id
+    data_tests:
+    - not_null
+    - unique
+  - name: client_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_client')
+          field: client_key
+  - name: provider_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_provider')
+          field: provider_key
+  - name: payer_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_payer')
+          field: payer_key
+  - name: event_date_key
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_date')
+          field: date_key

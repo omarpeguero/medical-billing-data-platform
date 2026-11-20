@@ -1,0 +1,284 @@
+table 'dw fact_claim_financials'
+	lineageTag: 114ab8d0-a353-4f7f-89da-ed93b3a70c16
+
+	column claim_line_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6baeb582-cb41-4cfa-aa3f-4c5d2820ae0f
+		summarizeBy: sum
+		sourceColumn: claim_line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 33897238-0243-450f-9357-6336be48f168
+		summarizeBy: sum
+		sourceColumn: claim_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column billing_entry_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d9c66a2-8b08-435a-9cb8-fbd1a6b458ee
+		summarizeBy: sum
+		sourceColumn: billing_entry_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column client_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 5b470f07-f2cc-4533-bfc6-5c08f4dfcee5
+		summarizeBy: none
+		sourceColumn: client_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 9d150ecb-c4c8-4b68-a0ea-78b0ac3ea67a
+		summarizeBy: none
+		sourceColumn: provider_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payer_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d7bdae9-3e66-4ca4-a371-fded4f934920
+		summarizeBy: none
+		sourceColumn: payer_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_key
+		dataType: int64
+		formatString: 0
+		lineageTag: ce922bc0-250f-4db7-b23a-e71cd2dfcb35
+		summarizeBy: none
+		sourceColumn: service_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 42edec4f-ecd3-4f2c-bfa1-213ed3f787bd
+		summarizeBy: sum
+		sourceColumn: service_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9c4e4da1-e96f-4952-bed9-9f436a430a2e
+		summarizeBy: none
+		sourceColumn: service_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column line_status
+		dataType: string
+		lineageTag: 001af4b5-5df3-4227-9f1e-bea524e74a04
+		summarizeBy: none
+		sourceColumn: line_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_status
+		dataType: string
+		lineageTag: f6edca86-7d2f-4415-bdeb-fb6e7727bc51
+		summarizeBy: none
+		sourceColumn: claim_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column billed_amount
+		dataType: double
+		lineageTag: c014e79e-43d8-4a42-8f81-d9f3ad8672c3
+		summarizeBy: sum
+		sourceColumn: billed_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column allowed_amount
+		dataType: double
+		lineageTag: 856ffb42-34d8-4abb-8cc8-fd03eb285cfe
+		summarizeBy: sum
+		sourceColumn: allowed_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column patient_responsibility_amount
+		dataType: double
+		lineageTag: 99e2589e-9532-4743-ad20-32e972f068c4
+		summarizeBy: sum
+		sourceColumn: patient_responsibility_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_paid
+		dataType: double
+		lineageTag: cda924f3-a26e-4540-9332-3ae0784b8836
+		summarizeBy: sum
+		sourceColumn: total_paid
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column insurance_paid
+		dataType: double
+		lineageTag: 48484cf3-3f11-4888-a896-67ad4a108c41
+		summarizeBy: sum
+		sourceColumn: insurance_paid
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column patient_paid
+		dataType: double
+		lineageTag: f8639ce1-392b-45a1-9d67-138beed945b2
+		summarizeBy: sum
+		sourceColumn: patient_paid
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_adjusted
+		dataType: double
+		lineageTag: 9b20888f-6fa4-47c7-ae17-42434bc2484a
+		summarizeBy: sum
+		sourceColumn: total_adjusted
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column contractual_adjusted
+		dataType: double
+		lineageTag: d116cadc-fe85-4ab2-8c33-08cddc0298cd
+		summarizeBy: sum
+		sourceColumn: contractual_adjusted
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column write_off_adjusted
+		dataType: double
+		lineageTag: 2aeb3d72-f005-475f-bed7-58ec215a338f
+		summarizeBy: sum
+		sourceColumn: write_off_adjusted
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column outstanding_balance
+		dataType: double
+		lineageTag: 2c00a017-b477-4913-85d1-5501b45e9338
+		summarizeBy: sum
+		sourceColumn: outstanding_balance
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column payment_transaction_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 20203c76-168c-4e62-afc8-dee9772940d9
+		summarizeBy: sum
+		sourceColumn: payment_transaction_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column adjustment_transaction_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 194caf92-9213-4aa8-b772-68a95124ea43
+		summarizeBy: sum
+		sourceColumn: adjustment_transaction_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_payment_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 82593201-73a3-4f66-87d6-fd67248d6c6c
+		summarizeBy: none
+		sourceColumn: first_payment_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column last_payment_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0055aeb4-0dfe-4eed-bf71-040540cee1f5
+		summarizeBy: none
+		sourceColumn: last_payment_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column first_adjustment_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9cd5a9c7-c0d7-4043-8ea1-f40d68bd4864
+		summarizeBy: none
+		sourceColumn: first_adjustment_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column last_adjustment_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 389c3209-01db-4f2c-8729-61f778b9b62f
+		summarizeBy: none
+		sourceColumn: last_adjustment_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column _source_change_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e3fac9f2-9b1b-4154-9fad-7eb2582a7a0f
+		summarizeBy: none
+		sourceColumn: _source_change_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw fact_claim_financials' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost", "MedicalBilling_DW"),
+				    dw_fact_claim_financials = Source{[Schema="dw",Item="fact_claim_financials"]}[Data]
+				in
+				    dw_fact_claim_financials
+
+	annotation PBI_ResultType = Table
+

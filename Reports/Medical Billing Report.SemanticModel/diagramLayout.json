@@ -1,0 +1,152 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 342.83580794689817,
+            "y": 1042.1544773976359
+          },
+          "nodeIndex": "dw dim_client",
+          "nodeLineageTag": "1d4d14b0-62e4-432b-89eb-ae93b20db217",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1864.9679532434068,
+            "y": 321.42572164721321
+          },
+          "nodeIndex": "dw dim_date",
+          "nodeLineageTag": "8a44521e-3252-4732-8609-79f6fdc15b15",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 317.02559828239134,
+            "y": 1.1199065438306661
+          },
+          "nodeIndex": "dw dim_payer",
+          "nodeLineageTag": "192d9767-3c4d-41bf-acb3-f071198259cc",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 396.08759662538353,
+            "y": 302.52413050081179
+          },
+          "nodeIndex": "dw dim_provider",
+          "nodeLineageTag": "fdb0820d-0247-417a-bd94-58b7db53dd8a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1250.0823382434066,
+            "y": 607.188586557984
+          },
+          "nodeIndex": "dw dim_service",
+          "nodeLineageTag": "25cfa6b6-4b51-4456-802f-595c6ef3cef3",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 683.04684851990737,
+            "y": -50
+          },
+          "nodeIndex": "dw fact_adjustments",
+          "nodeLineageTag": "0b1159e5-bcc8-4205-a75a-364b936a65d1",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 969.950035849798,
+            "y": 253.9088759535623
+          },
+          "nodeIndex": "dw fact_billing",
+          "nodeLineageTag": "1c3614d0-a691-495e-8f8a-b4a0144888a9",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 302.53456026899141
+          },
+          "nodeIndex": "dw fact_claim_events",
+          "nodeLineageTag": "48055786-d7d4-4c77-a807-b3de4d7a7781",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 744.92328455997256,
+            "y": 607.49069421530839
+          },
+          "nodeIndex": "dw fact_claim_financials",
+          "nodeLineageTag": "114ab8d0-a353-4f7f-89da-ed93b3a70c16",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1049.3300770049548,
+            "y": 960.87925329442646
+          },
+          "nodeIndex": "dw fact_payments",
+          "nodeLineageTag": "f60538b1-6f14-4613-a175-a45a8cd99cea",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 56.447393005377734,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

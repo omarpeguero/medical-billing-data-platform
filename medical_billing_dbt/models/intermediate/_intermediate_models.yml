@@ -1,0 +1,44 @@
+version: 2
+models:
+  - name: int_claim_line_financials
+    description: "One row per active claim line with separately aggregated signed payment and adjustment totals."
+    columns:
+      - name: claim_line_id
+        data_tests: [not_null, unique]
+      - name: claim_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_claims')
+                field: claim_id
+      - name: billing_entry_id
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_billing_entries')
+                field: billing_entry_id
+      - name: billed_amount
+        data_tests: [not_null]
+      - name: outstanding_balance
+        data_tests: [not_null]
+  - name: int_claim_lifecycle
+    description: "One row per logical claim with aggregated events and financial totals."
+    columns:
+      - name: claim_id
+        data_tests: [not_null, unique]
+      - name: claim_line_count
+        data_tests: [not_null]
+  - name: int_billing_performance
+    description: "One row per billing entry with claim association and submission lag."
+    columns:
+      - name: billing_entry_id
+        data_tests: [not_null, unique]
+      - name: claim_line_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_claim_lines')
+                field: claim_line_id

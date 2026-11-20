@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+.git
+logs
+log
+*.log
+target
+.dbt
+__pycache__

@@ -1,0 +1,12 @@
+name: medical-billing-dbt
+services:
+  dbt:
+    build: .
+    image: medical-billing-dbt:local
+    env_file:
+      - .env
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    environment:
+      DBT_PROFILES_DIR: /workspace/config

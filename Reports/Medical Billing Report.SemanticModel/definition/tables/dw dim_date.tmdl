@@ -1,0 +1,106 @@
+table 'dw dim_date'
+	lineageTag: 8a44521e-3252-4732-8609-79f6fdc15b15
+	dataCategory: Time
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 89a1e31e-932f-4118-8f45-0e9ed5b1ddb6
+		summarizeBy: sum
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column calendar_date
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: f112ee74-3ddd-4d64-9cdd-858ca6854ce8
+		summarizeBy: none
+		sourceColumn: calendar_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column calendar_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 80d8c627-3972-4b93-989f-19b343ccebcf
+		summarizeBy: sum
+		sourceColumn: calendar_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column calendar_month
+		dataType: int64
+		formatString: 0
+		lineageTag: 627d9c9f-d65e-4af1-888a-18b6b71b5165
+		summarizeBy: sum
+		sourceColumn: calendar_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		lineageTag: 2d56be04-fbe8-42d9-93e5-ae7b4f8d51c1
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: calendar_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column calendar_quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c8287c7-375f-49c2-bb3b-8d4f970f02d8
+		summarizeBy: sum
+		sourceColumn: calendar_quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_month
+		dataType: int64
+		formatString: 0
+		lineageTag: c182fc10-dda4-4cc6-9bbb-dd121eb62c3b
+		summarizeBy: sum
+		sourceColumn: day_of_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_name
+		dataType: string
+		lineageTag: c7f81982-f790-4afd-82d5-f83868eaf1ef
+		summarizeBy: none
+		sourceColumn: day_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a749c50b-35c6-424d-8566-ef84b29c554f
+		summarizeBy: none
+		sourceColumn: month_start_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Month label, sorted chronologically
+	column 'Service Month' = FORMAT('dw dim_date'[calendar_date], "MMM yyyy")
+		dataType: string
+		lineageTag: 5a368596-dfe6-421e-88fd-d47d7ba2e795
+		sortByColumn: month_start_date
+
+	partition 'dw dim_date' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost", "MedicalBilling_DW"),
+				    dw_dim_date = Source{[Schema="dw",Item="dim_date"]}[Data]
+				in
+				    dw_dim_date
+
+	annotation PBI_ResultType = Table
+

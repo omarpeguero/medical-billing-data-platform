@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Medical Billing Report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "8a5d3667-858a-42df-9c6e-849b2b8e45ea"
+  }
+}

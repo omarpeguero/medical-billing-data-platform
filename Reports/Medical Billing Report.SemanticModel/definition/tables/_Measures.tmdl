@@ -1,0 +1,210 @@
+/// Home table for report measures
+table _Measures
+	lineageTag: 7bb5a0f1-23a3-4213-b69f-932bd8a451ed
+
+	/// Total billed amount on claim lines
+	measure 'Gross Charges' = SUM('dw fact_claim_financials'[billed_amount])
+		formatString: \$#,0
+		displayFolder: 1 Financials
+		lineageTag: 61fd6cce-7714-47f4-b40c-4baea53d7f39
+
+	/// Contracted fee-schedule reductions (CO-45)
+	measure 'Contractual Adj.' = SUM('dw fact_claim_financials'[contractual_adjusted])
+		formatString: \$#,0
+		displayFolder: 1 Financials
+		lineageTag: cc428bb1-3a52-4ff4-b65e-98f96859c40d
+
+	/// Bad debt / non-covered write-offs - true revenue leakage
+	measure Write-offs = SUM('dw fact_claim_financials'[write_off_adjusted])
+		formatString: \$#,0
+		displayFolder: 1 Financials
+		lineageTag: 399bc651-b138-4892-9c74-0b41db5c2fbb
+
+	/// Other reductions and adjustment reversals
+	measure 'Other Adj.' = SUM('dw fact_claim_financials'[total_adjusted]) - [Contractual Adj.] - [Write-offs]
+		formatString: \$#,0
+		displayFolder: 1 Financials
+		lineageTag: 8f5702a9-0cb8-4b21-83a7-4a06c1812f86
+
+	measure 'Insurance Paid' = SUM('dw fact_claim_financials'[insurance_paid])
+		formatString: \$#,0
+		displayFolder: 1 Financials
+		lineageTag: bc1243c6-e3e2-4d30-a62d-6b3b1a6570cf
+
+	measure 'Patient Paid' = SUM('dw fact_claim_financials'[patient_paid])
+		formatString: \$#,0
+		displayFolder: 1 Financials
+		lineageTag: 8bb84508-4211-4998-bd29-ba506f88803c
+
+	measure 'Total Collected' = SUM('dw fact_claim_financials'[total_paid])
+		formatString: \$#,0
+		displayFolder: 1 Financials
+		lineageTag: 31c5e1ec-ad1a-4542-af9d-a245d9ab119f
+
+	/// Current open balance (billed - paid - adjusted)
+	measure 'Outstanding AR' = SUM('dw fact_claim_financials'[outstanding_balance])
+		formatString: \$#,0
+		displayFolder: 1 Financials
+		lineageTag: d1fe77d4-dc5c-488c-a8d6-ca9e64c144d0
+
+	/// Charges the practice is contractually entitled to collect
+	measure 'Net Collectible' = [Gross Charges] - [Contractual Adj.]
+		formatString: \$#,0
+		displayFolder: 1 Financials
+		lineageTag: b6ff8bde-2f2f-4303-a07d-132c743c6a69
+
+	/// Signed step values for the charge-to-cash waterfall; the total bar equals Outstanding AR
+	measure 'Waterfall Value' = SWITCH(SELECTEDVALUE('Waterfall Step'[Step Order]), 1, [Gross Charges], 2, -[Contractual Adj.], 3, -[Write-offs], 4, -[Other Adj.], 5, -[Insurance Paid], 6, -[Patient Paid])
+		formatString: \$#,0
+		displayFolder: 1 Financials
+		lineageTag: 96acff1f-2ec4-4a71-8915-ea3bb103dfcb
+
+	/// Payments / (charges - contractual adj.), on adjudicated claim lines. Industry benchmark: 95%+
+	measure 'Net Collection Rate' = VAR adjudicated = FILTER(VALUES('dw fact_claim_financials'[claim_line_id]), NOT ISBLANK(CALCULATE(MAX('dw fact_claim_financials'[allowed_amount])))) RETURN CALCULATE(DIVIDE([Total Collected], [Net Collectible]), adjudicated)
+		formatString: 0.0%
+		displayFolder: 2 KPIs
+		lineageTag: 3406198d-7d03-4338-8bb4-e80731717f5e
+
+	measure 'Avg Daily Charges (90d)' = VAR asOf = MAX('dw fact_claim_financials'[service_date]) RETURN DIVIDE(CALCULATE([Gross Charges], DATESINPERIOD('dw dim_date'[calendar_date], asOf, -90, DAY)), 90)
+		formatString: \$#,0
+		displayFolder: 2 KPIs
+		lineageTag: 6565f7ae-f98d-4333-96c6-e91fad1590aa
+
+	/// Outstanding AR / average daily charges over the last 90 days of service. Benchmark: under 40
+	measure 'Days in AR' = DIVIDE([Outstanding AR], [Avg Daily Charges (90d)])
+		formatString: 0.0
+		displayFolder: 2 KPIs
+		lineageTag: fc41933d-d31f-48d7-8fb9-2301c2dc1d05
+
+	/// Average days from date of service to first claim submission
+	measure 'Avg Days to Submit' = AVERAGE('dw fact_billing'[days_service_to_first_submission])
+		formatString: 0.0
+		displayFolder: 2 KPIs
+		lineageTag: cd8c11cd-6b1a-491b-b749-b597dbd43e41
+
+	measure 'Claims Submitted' = CALCULATE(DISTINCTCOUNT('dw fact_claim_events'[claim_id]), 'dw fact_claim_events'[event_type] = "submitted", REMOVEFILTERS('dw fact_claim_events'[reason_code], 'dw fact_claim_events'[reason_description]))
+		formatString: #,0
+		displayFolder: 3 Claims
+		lineageTag: e804071a-d5c3-46e7-beb0-22bbefad9ae7
+
+	measure 'Claims Denied' = CALCULATE(DISTINCTCOUNT('dw fact_claim_events'[claim_id]), 'dw fact_claim_events'[event_type] = "denied")
+		formatString: #,0
+		displayFolder: 3 Claims
+		lineageTag: f9c05d3c-322e-47bd-aa4b-ff480e4dbc3e
+
+	/// Claims rejected by the clearinghouse before reaching the payer
+	measure 'Claims Rejected' = CALCULATE(DISTINCTCOUNT('dw fact_claim_events'[claim_id]), 'dw fact_claim_events'[event_type] = "clearinghouse_rejected")
+		formatString: #,0
+		displayFolder: 3 Claims
+		lineageTag: bc41144d-9ea8-4bbc-90b3-172c2c87f77b
+
+	/// Distinct claims denied / distinct claims submitted. Benchmark: under 5-10%
+	measure 'Denial Rate' = DIVIDE([Claims Denied], [Claims Submitted])
+		formatString: 0.0%
+		displayFolder: 2 KPIs
+		lineageTag: 83f65684-4a6f-422b-aee2-cc6b48dd3d86
+
+	/// Share of submitted claims never rejected or denied. Benchmark: 95%+
+	measure 'Clean Claim Rate' = 1 - DIVIDE(CALCULATE(DISTINCTCOUNT('dw fact_claim_events'[claim_id]), 'dw fact_claim_events'[event_type] IN {"denied", "clearinghouse_rejected"}, REMOVEFILTERS('dw fact_claim_events'[reason_code], 'dw fact_claim_events'[reason_description])), [Claims Submitted])
+		formatString: 0.0%
+		displayFolder: 2 KPIs
+		lineageTag: 8dca66c4-09bd-48b1-a6e3-facab969e827
+
+	/// Billed amount on claims that received at least one denial
+	measure 'Denied Charges' = VAR denied = CALCULATETABLE(VALUES('dw fact_claim_events'[claim_id]), 'dw fact_claim_events'[event_type] = "denied") RETURN CALCULATE([Gross Charges], TREATAS(denied, 'dw fact_claim_financials'[claim_id]), REMOVEFILTERS('dw dim_date'))
+		formatString: \$#,0
+		displayFolder: 3 Claims
+		lineageTag: 33030fa6-3571-4eb5-adb4-767a11561131
+
+	/// Cash eventually collected on claims that were denied
+	measure 'Denied $ Recovered' = VAR denied = CALCULATETABLE(VALUES('dw fact_claim_events'[claim_id]), 'dw fact_claim_events'[event_type] = "denied") RETURN CALCULATE([Total Collected], TREATAS(denied, 'dw fact_claim_financials'[claim_id]), REMOVEFILTERS('dw dim_date'))
+		formatString: \$#,0
+		displayFolder: 3 Claims
+		lineageTag: 06f6040d-e4dc-46d8-b34c-c4740dcb8e92
+
+	/// Open balance still sitting on denied claims - the recoverable opportunity
+	measure 'Denied $ Still Open' = VAR denied = CALCULATETABLE(VALUES('dw fact_claim_events'[claim_id]), 'dw fact_claim_events'[event_type] = "denied") RETURN CALCULATE([Outstanding AR], TREATAS(denied, 'dw fact_claim_financials'[claim_id]), REMOVEFILTERS('dw dim_date'))
+		formatString: \$#,0
+		displayFolder: 3 Claims
+		lineageTag: ffea2ea7-8404-4f95-9a9b-e34368859920
+
+	/// Share of denied claims that were later paid (appeal / resubmission success)
+	measure 'Denial Recovery Rate' = VAR denied = CALCULATETABLE(VALUES('dw fact_claim_events'[claim_id]), 'dw fact_claim_events'[event_type] = "denied") VAR paid = CALCULATETABLE(VALUES('dw fact_claim_events'[claim_id]), 'dw fact_claim_events'[event_type] IN {"paid", "partially_paid"}, REMOVEFILTERS('dw fact_claim_events'[reason_code], 'dw fact_claim_events'[reason_description]), REMOVEFILTERS('dw dim_date')) RETURN DIVIDE(COUNTROWS(INTERSECT(denied, paid)), COUNTROWS(denied))
+		formatString: 0.0%
+		displayFolder: 3 Claims
+		lineageTag: c5a1bfb6-069f-4015-8e5b-d3dc23b4cac7
+
+	measure 'Claims Appealed' = CALCULATE(DISTINCTCOUNT('dw fact_claim_events'[claim_id]), 'dw fact_claim_events'[event_type] = "appealed", REMOVEFILTERS('dw fact_claim_events'[reason_code], 'dw fact_claim_events'[reason_description]))
+		formatString: #,0
+		displayFolder: 3 Claims
+		lineageTag: 2ca9432c-6674-4a55-abea-034d7553607b
+
+	/// Cumulative share of denied charges by reason code (Pareto line)
+	measure 'Denial Pareto %' = VAR cur = [Denied Charges] VAR codes = CALCULATETABLE(FILTER(ADDCOLUMNS(VALUES('dw fact_claim_events'[reason_code]), "@v", [Denied Charges]), [@v] > 0), REMOVEFILTERS('dw fact_claim_events'[reason_code], 'dw fact_claim_events'[reason_description], 'dw fact_claim_events'[Reason])) RETURN IF(NOT ISBLANK(cur), DIVIDE(SUMX(FILTER(codes, [@v] >= cur), [@v]), SUMX(codes, [@v])))
+		formatString: 0%
+		displayFolder: 3 Claims
+		lineageTag: f7566364-7be1-4d76-a200-7c5564c71c40
+
+	/// Cash collected within N days of service as a % of net collectible, by service cohort. Blank where the cohort is not yet N days old
+	measure 'Cumulative Collected %' = VAR d = MAX('Days Since Service'[Days]) VAR asOf = CALCULATE(MAX('dw fact_payments'[payment_date]), REMOVEFILTERS()) VAR lines = VALUES('dw fact_claim_financials'[claim_line_id]) VAR lastSvc = MAX('dw fact_claim_financials'[service_date]) VAR collected = CALCULATE(SUM('dw fact_payments'[amount]), TREATAS(lines, 'dw fact_payments'[claim_line_id]), 'dw fact_payments'[days_since_service] <= d, REMOVEFILTERS('dw dim_date')) RETURN IF(NOT ISBLANK(lastSvc) && lastSvc + d <= asOf, DIVIDE(collected, [Net Collectible]))
+		formatString: 0%
+		displayFolder: 4 Collections
+		lineageTag: 7b4f3ebb-b211-455c-b78a-c17a8f9393bc
+
+	measure 'Collected % @30d' = CALCULATE([Cumulative Collected %], 'Days Since Service'[Days] = 30)
+		formatString: 0%
+		displayFolder: 4 Collections
+		lineageTag: 0caaf5f2-7cb5-4139-9c94-b88ba9de2bcf
+
+	measure 'Collected % @60d' = CALCULATE([Cumulative Collected %], 'Days Since Service'[Days] = 60)
+		formatString: 0%
+		displayFolder: 4 Collections
+		lineageTag: bbdf7a2b-4697-43c7-b8e4-3c2647af16a5
+
+	measure 'Collected % @90d' = CALCULATE([Cumulative Collected %], 'Days Since Service'[Days] = 90)
+		formatString: 0%
+		displayFolder: 4 Collections
+		lineageTag: c56129df-e654-41ed-9c54-ababa5f7a0a0
+
+	measure 'Collected % @120d' = CALCULATE([Cumulative Collected %], 'Days Since Service'[Days] = 120)
+		formatString: 0%
+		displayFolder: 4 Collections
+		lineageTag: ef2b277f-8ef2-495d-8505-515eacb97b95
+
+	/// Dollar-weighted average days from service to payment
+	measure 'Days to Cash' = VAR lines = VALUES('dw fact_claim_financials'[claim_line_id]) RETURN CALCULATE(DIVIDE(SUMX('dw fact_payments', 'dw fact_payments'[amount] * 'dw fact_payments'[days_since_service]), SUM('dw fact_payments'[amount])), TREATAS(lines, 'dw fact_payments'[claim_line_id]), REMOVEFILTERS('dw dim_date'))
+		formatString: 0.0
+		displayFolder: 4 Collections
+		lineageTag: a8c528df-6bbb-4362-b2c5-c4e15ed8c1ee
+
+	/// Latest source change loaded by the Airflow + dbt pipeline
+	measure 'Data As Of' = CALCULATE(MAX('dw fact_claim_financials'[_source_change_at]), REMOVEFILTERS())
+		formatString: mmm d, yyyy h:nn AM/PM
+		displayFolder: 5 Meta
+		lineageTag: 5a76f891-7721-4a61-aafe-c09e12c96868
+
+	/// Dynamic page headline
+	measure 'Headline Executive' = VAR g = [Gross Charges] VAR c = [Total Collected] VAR k = [Contractual Adj.] VAR o = [Outstanding AR] RETURN "Every billed dollar, traced: " & FORMAT(g / 1e6, "$0.00") & "M billed  →  " & FORMAT(k / 1e3, "$#,0") & "K contractual  →  " & FORMAT(c / 1e3, "$#,0") & "K collected (" & FORMAT([Net Collection Rate], "0.0%") & " net collection rate)  →  " & FORMAT(o / 1e3, "$#,0") & "K still open, " & FORMAT([Days in AR], "0") & " days in AR."
+		displayFolder: 6 Narrative
+		lineageTag: 459f6af3-d55b-461b-b2a0-b99f0358f4a0
+
+	/// Dynamic page headline
+	measure 'Headline Collections' = VAR cohorts = FILTER(ADDCOLUMNS(VALUES('dw dim_date'[month_start_date]), "@c", [Collected % @30d]), NOT ISBLANK([@c])) VAR firstM = MINX(cohorts, 'dw dim_date'[month_start_date]) VAR lastM = MAXX(cohorts, 'dw dim_date'[month_start_date]) VAR firstV = MAXX(FILTER(cohorts, 'dw dim_date'[month_start_date] = firstM), [@c]) VAR lastV = MAXX(FILTER(cohorts, 'dw dim_date'[month_start_date] = lastM), [@c]) RETURN IF(COUNTROWS(cohorts) >= 2, IF(lastV < firstV, "Cash is slowing: ", "Cash is speeding up: ") & "the " & FORMAT(lastM, "mmm yyyy") & " cohort collected " & FORMAT(lastV, "0%") & " of net charges in its first 30 days, vs " & FORMAT(firstV, "0%") & " for " & FORMAT(firstM, "mmm yyyy") & ". Dollar-weighted days to cash: " & FORMAT([Days to Cash], "0") & ".", "Select at least two cohorts to compare collection speed.")
+		displayFolder: 6 Narrative
+		lineageTag: 468f9522-801d-4bbe-a7de-ae95cdbe9928
+
+	/// Dynamic page headline
+	measure 'Headline Denials' = VAR topRow = TOPN(1, FILTER(ADDCOLUMNS(VALUES('dw fact_claim_events'[Reason]), "@v", [Denied Charges]), [@v] > 0), [@v], DESC) VAR topReason = MAXX(topRow, 'dw fact_claim_events'[Reason]) RETURN FORMAT([Denial Rate], "0.0%") & " of claims were denied (" & FORMAT([Denied Charges] / 1e3, "$#,0") & "K in charges). " & FORMAT([Denial Recovery Rate], "0%") & " were recovered after rework, but " & FORMAT([Denied $ Still Open] / 1e3, "$#,0.0") & "K is still open. Top reason: " & topReason & "."
+		displayFolder: 6 Narrative
+		lineageTag: 4537c6b9-e868-479d-a163-1b12ce3824ee
+
+	column _
+		isHidden
+		lineageTag: 973f0024-e2b9-4286-8b70-4bf7e2328a39
+		isNameInferred
+		sourceColumn: [_]
+
+	partition _Measures = calculated
+		mode: import
+		source = ROW("_", BLANK())
+

@@ -1,0 +1,215 @@
+table 'dw fact_billing'
+	lineageTag: 1c3614d0-a691-495e-8f8a-b4a0144888a9
+
+	column billing_entry_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 2817349b-1fd3-44e9-b326-48b74034b277
+		summarizeBy: sum
+		sourceColumn: billing_entry_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column client_key
+		dataType: int64
+		formatString: 0
+		lineageTag: c95e0853-7097-4017-a051-469efbd0d2ef
+		summarizeBy: none
+		sourceColumn: client_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_key
+		dataType: int64
+		formatString: 0
+		lineageTag: e316b218-43c2-468b-a184-0e39b94ded55
+		summarizeBy: none
+		sourceColumn: provider_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ff24a23-7d3d-4022-8d3d-5aafa822c002
+		summarizeBy: none
+		sourceColumn: service_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payer_key
+		dataType: int64
+		formatString: 0
+		lineageTag: b89a1ca7-c6a6-4c89-838a-c799ee3347f0
+		summarizeBy: none
+		sourceColumn: payer_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 8f986d3f-442b-4ee6-acfc-f6ae0d826398
+		summarizeBy: sum
+		sourceColumn: service_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: bc8d1f8f-4598-4a68-80ab-586935e9a07d
+		summarizeBy: none
+		sourceColumn: service_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column claim_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 8f59abc9-2db7-4145-bb90-7552e7c43eea
+		summarizeBy: sum
+		sourceColumn: claim_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_line_id
+		dataType: int64
+		formatString: 0
+		lineageTag: f4b866d7-7735-42e9-adfa-61cf4ad95e4d
+		summarizeBy: sum
+		sourceColumn: claim_line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column entry_status
+		dataType: string
+		lineageTag: 9ac9c774-289e-45e8-b7a8-c24c4f99ef12
+		summarizeBy: none
+		sourceColumn: entry_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_status
+		dataType: string
+		lineageTag: 077017f4-ff63-4d02-b67f-835d43237ca9
+		summarizeBy: none
+		sourceColumn: claim_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column units
+		dataType: double
+		lineageTag: 1e46c338-9a4e-452b-9054-8fc575e9f6a1
+		summarizeBy: sum
+		sourceColumn: units
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column charge_per_unit
+		dataType: double
+		lineageTag: 07480bd5-5a6e-42f6-895b-1c7a2709a391
+		summarizeBy: sum
+		sourceColumn: charge_per_unit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column charge_amount
+		dataType: double
+		lineageTag: 27916eb4-564b-462c-a2ce-250a9230d9a1
+		summarizeBy: sum
+		sourceColumn: charge_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column has_claim_line
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 62df87f6-f998-4f82-bfbc-9e02ea35a0fd
+		summarizeBy: none
+		sourceColumn: has_claim_line
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_been_submitted
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7a440b84-4071-4951-961c-f2fa7d493b1a
+		summarizeBy: none
+		sourceColumn: has_been_submitted
+
+		annotation SummarizationSetBy = Automatic
+
+	column days_service_to_first_submission
+		dataType: int64
+		formatString: 0
+		lineageTag: 7629ae93-83f8-492a-bf3a-c6028ffbf6f0
+		summarizeBy: sum
+		sourceColumn: days_service_to_first_submission
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_unbilled_ready_or_hold
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a1390962-8cbd-4dc0-8184-9a858a61d8e9
+		summarizeBy: none
+		sourceColumn: is_unbilled_ready_or_hold
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_void
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: ebd4f9f5-92fe-400b-8ccd-f26d02f0e51b
+		summarizeBy: none
+		sourceColumn: is_void
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bf42dbcb-dff4-4a6b-a860-e019a1ae1ff9
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9be14fe7-d2f1-43b5-a001-58e30fb991e3
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _source_change_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7319cfff-e646-4539-9c6f-870f1bf6a6e4
+		summarizeBy: none
+		sourceColumn: _source_change_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw fact_billing' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost", "MedicalBilling_DW"),
+				    dw_fact_billing = Source{[Schema="dw",Item="fact_billing"]}[Data]
+				in
+				    dw_fact_billing
+
+	annotation PBI_ResultType = Table
+

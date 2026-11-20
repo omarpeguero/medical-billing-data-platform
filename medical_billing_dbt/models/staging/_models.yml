@@ -1,0 +1,227 @@
+version: 2
+models:
+  - name: stg_clients
+    description: "Active clients rows from Airbyte replicated EMR data."
+    columns:
+      - name: client_id
+        data_tests:
+          - not_null
+          - unique
+      - name: client_number
+        data_tests:
+          - not_null
+      - name: first_name
+        data_tests:
+          - not_null
+      - name: last_name
+        data_tests:
+          - not_null
+      - name: date_of_birth
+        data_tests:
+          - not_null
+      - name: client_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['active', 'inactive', 'deceased']
+  - name: stg_providers
+    description: "Active providers rows from Airbyte replicated EMR data."
+    columns:
+      - name: provider_id
+        data_tests:
+          - not_null
+          - unique
+      - name: provider_number
+        data_tests:
+          - not_null
+      - name: provider_name
+        data_tests:
+          - not_null
+      - name: provider_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['active', 'inactive']
+  - name: stg_payers
+    description: "Active payers rows from Airbyte replicated EMR data."
+    columns:
+      - name: payer_id
+        data_tests:
+          - not_null
+          - unique
+      - name: payer_code
+        data_tests:
+          - not_null
+      - name: payer_name
+        data_tests:
+          - not_null
+      - name: payer_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['commercial', 'medicare', 'medicaid', 'self_pay', 'other']
+  - name: stg_service_codes
+    description: "Active service codes rows from Airbyte replicated EMR data."
+    columns:
+      - name: service_code_id
+        data_tests:
+          - not_null
+          - unique
+      - name: procedure_code
+        data_tests:
+          - not_null
+      - name: code_system
+        data_tests:
+          - not_null
+      - name: code_system
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['CPT', 'HCPCS', 'OTHER']
+      - name: unit_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['unit', '15_min', 'hour', 'visit']
+  - name: stg_billing_entries
+    description: "Active billing entries rows from Airbyte replicated EMR data."
+    columns:
+      - name: billing_entry_id
+        data_tests:
+          - not_null
+          - unique
+      - name: client_id
+        data_tests:
+          - not_null
+      - name: provider_id
+        data_tests:
+          - not_null
+      - name: service_code_id
+        data_tests:
+          - not_null
+      - name: charge_amount
+        data_tests:
+          - not_null
+      - name: entry_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['draft', 'ready', 'on_hold', 'billed', 'void']
+  - name: stg_claims
+    description: "Active claims rows from Airbyte replicated EMR data."
+    columns:
+      - name: claim_id
+        data_tests:
+          - not_null
+          - unique
+      - name: claim_number
+        data_tests:
+          - not_null
+      - name: client_id
+        data_tests:
+          - not_null
+      - name: provider_id
+        data_tests:
+          - not_null
+      - name: payer_id
+        data_tests:
+          - not_null
+      - name: claim_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['original', 'replacement', 'void']
+      - name: claim_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['draft', 'submitted', 'accepted', 'rejected', 'pending', 'partially_paid', 'paid', 'denied', 'closed', 'void']
+  - name: stg_claim_lines
+    description: "Active claim lines rows from Airbyte replicated EMR data."
+    columns:
+      - name: claim_line_id
+        data_tests:
+          - not_null
+          - unique
+      - name: claim_id
+        data_tests:
+          - not_null
+      - name: billing_entry_id
+        data_tests:
+          - not_null
+      - name: billed_amount
+        data_tests:
+          - not_null
+      - name: line_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['unsubmitted', 'submitted', 'pending', 'partially_paid', 'paid', 'denied', 'closed', 'void']
+  - name: stg_claim_events
+    description: "Active claim events rows from Airbyte replicated EMR data."
+    columns:
+      - name: claim_event_id
+        data_tests:
+          - not_null
+          - unique
+      - name: claim_id
+        data_tests:
+          - not_null
+      - name: event_type
+        data_tests:
+          - not_null
+      - name: event_at
+        data_tests:
+          - not_null
+      - name: event_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['submitted', 'clearinghouse_accepted', 'clearinghouse_rejected', 'payer_accepted', 'pending', 'denied', 'appealed', 'resubmitted', 'partially_paid', 'paid', 'closed', 'voided']
+  - name: stg_payments
+    description: "Active payments rows from Airbyte replicated EMR data."
+    columns:
+      - name: payment_id
+        data_tests:
+          - not_null
+          - unique
+      - name: claim_line_id
+        data_tests:
+          - not_null
+      - name: amount
+        data_tests:
+          - not_null
+      - name: payment_source
+        data_tests:
+          - not_null
+      - name: payment_source
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['insurance', 'patient']
+      - name: transaction_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['payment', 'reversal', 'refund']
+  - name: stg_adjustments
+    description: "Active adjustments rows from Airbyte replicated EMR data."
+    columns:
+      - name: adjustment_id
+        data_tests:
+          - not_null
+          - unique
+      - name: claim_line_id
+        data_tests:
+          - not_null
+      - name: amount
+        data_tests:
+          - not_null
+      - name: adjustment_type
+        data_tests:
+          - not_null
+      - name: adjustment_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['contractual', 'write_off', 'other_reduction', 'reversal']

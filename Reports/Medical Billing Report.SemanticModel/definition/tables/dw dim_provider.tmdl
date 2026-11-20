@@ -1,0 +1,106 @@
+table 'dw dim_provider'
+	lineageTag: fdb0820d-0247-417a-bd94-58b7db53dd8a
+
+	column provider_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 33edcfe5-c01b-4f60-9e3b-0c8f85416a22
+		summarizeBy: none
+		sourceColumn: provider_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f305c79-d70d-4571-92c7-a4faebf8f54a
+		summarizeBy: sum
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_number
+		dataType: string
+		lineageTag: dbf7dc1f-47f2-47ad-86b6-f8d11c475de6
+		summarizeBy: none
+		sourceColumn: provider_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_name
+		dataType: string
+		lineageTag: 774170fa-9446-42fb-b152-16b1d555403a
+		summarizeBy: none
+		sourceColumn: provider_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column npi
+		dataType: string
+		lineageTag: d2c269b5-b71e-469a-8231-eb81c26ef593
+		summarizeBy: none
+		sourceColumn: npi
+
+		annotation SummarizationSetBy = Automatic
+
+	column specialty
+		dataType: string
+		lineageTag: 66b3cc53-6613-4ccc-ae07-472c0ee7db71
+		summarizeBy: none
+		sourceColumn: specialty
+
+		annotation SummarizationSetBy = Automatic
+
+	column practice_name
+		dataType: string
+		lineageTag: c54f052d-2c7b-468e-81d7-9c0b6eac61a0
+		summarizeBy: none
+		sourceColumn: practice_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_code
+		dataType: string
+		lineageTag: c2d8e029-1136-445b-aaa1-7f38cb2c65fc
+		summarizeBy: none
+		sourceColumn: state_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_status
+		dataType: string
+		lineageTag: 192adab3-23bd-4b1e-b59b-043b9dfd1e08
+		summarizeBy: none
+		sourceColumn: provider_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 78ffce98-ab2a-4c39-9a80-461f5da5e033
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 74c2318c-1c0f-4887-901a-7e2fa2ea6469
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw dim_provider' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost", "MedicalBilling_DW"),
+				    dw_dim_provider = Source{[Schema="dw",Item="dim_provider"]}[Data]
+				in
+				    dw_dim_provider
+
+	annotation PBI_ResultType = Table
+

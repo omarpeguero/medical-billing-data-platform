@@ -1,0 +1,200 @@
+table 'dw fact_payments'
+	lineageTag: f60538b1-6f14-4613-a175-a45a8cd99cea
+
+	column payment_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 4f052e24-36e2-4b10-a7bb-afab63a57d9e
+		summarizeBy: sum
+		sourceColumn: payment_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_line_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f8b5f28-011c-4605-89da-fc0bba6fc6ee
+		summarizeBy: sum
+		sourceColumn: claim_line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f2e2bf3-de24-4632-8b08-bb928157b174
+		summarizeBy: sum
+		sourceColumn: claim_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column billing_entry_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 9dc0a018-ef78-4fa0-a17b-cc06a34fc422
+		summarizeBy: sum
+		sourceColumn: billing_entry_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column client_key
+		dataType: int64
+		formatString: 0
+		lineageTag: cf40d8be-c63d-4801-a4ac-718d5c704c16
+		summarizeBy: none
+		sourceColumn: client_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 68d4a841-a70a-4ef8-9ca9-7f8d775eeea0
+		summarizeBy: none
+		sourceColumn: provider_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 21a79882-8fc3-4f23-8b37-6dd6b5cd7324
+		summarizeBy: none
+		sourceColumn: service_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_payer_key
+		dataType: int64
+		formatString: 0
+		lineageTag: f14696de-3eb6-4e14-a414-b6b7ab854e7a
+		summarizeBy: sum
+		sourceColumn: claim_payer_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_payer_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c32ee55-7665-4d0b-9869-3c422a7f4c51
+		summarizeBy: sum
+		sourceColumn: payment_payer_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 6ba296d9-36f2-4a51-b914-4446a121ecec
+		summarizeBy: sum
+		sourceColumn: payment_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 283ae10a-4942-4bec-9144-3a31577d66d1
+		summarizeBy: none
+		sourceColumn: payment_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column posted_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1e26386f-9a36-4654-bf66-74b8d8e65731
+		summarizeBy: none
+		sourceColumn: posted_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_source
+		dataType: string
+		lineageTag: 686f41ce-b0f5-455e-8c04-67d44d51cc21
+		summarizeBy: none
+		sourceColumn: payment_source
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_type
+		dataType: string
+		lineageTag: faacd8a2-5645-4ace-9e55-91a045fb4a01
+		summarizeBy: none
+		sourceColumn: transaction_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column amount
+		dataType: double
+		lineageTag: e6070b71-207b-4081-87fe-dc077020ecb6
+		summarizeBy: sum
+		sourceColumn: amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column reference_number
+		dataType: string
+		lineageTag: 6fc164ff-55a5-46f8-b717-e7230ab54a74
+		summarizeBy: none
+		sourceColumn: reference_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column original_payment_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 02f9f8ed-caca-4606-b4dc-b29bfa733979
+		summarizeBy: sum
+		sourceColumn: original_payment_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b57735b6-38a5-4c24-8088-2c1c27a14568
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b9e2fba5-44d0-424f-a547-f069846d6d86
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column _source_change_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a6549e14-a5fe-4fc9-ba18-f92e084a046a
+		summarizeBy: none
+		sourceColumn: _source_change_at
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Days from date of service to payment date
+	column days_since_service = VAR svc = LOOKUPVALUE('dw fact_claim_financials'[service_date], 'dw fact_claim_financials'[claim_line_id], 'dw fact_payments'[claim_line_id]) RETURN IF(NOT ISBLANK(svc), INT('dw fact_payments'[payment_date] - svc))
+		dataType: int64
+		lineageTag: ae2ee10b-0eae-41e8-86aa-2340c89b0f5c
+		summarizeBy: none
+
+	partition 'dw fact_payments' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost", "MedicalBilling_DW"),
+				    dw_fact_payments = Source{[Schema="dw",Item="fact_payments"]}[Data]
+				in
+				    dw_fact_payments
+
+	annotation PBI_ResultType = Table
+

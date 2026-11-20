@@ -1,0 +1,15 @@
+/// Disconnected axis for cumulative collection curves
+table 'Days Since Service'
+	lineageTag: 80053dd8-03c4-4928-8b99-9b67bac72ca6
+
+	column Days
+		formatString: 0
+		lineageTag: e508a05e-79e4-4218-a935-5f763d058ac6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Days]
+
+	partition 'Days Since Service' = calculated
+		mode: import
+		source = SELECTCOLUMNS(GENERATESERIES(0, 240, 10), "Days", [Value])
+

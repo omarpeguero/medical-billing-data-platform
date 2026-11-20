@@ -1,0 +1,12 @@
+name: medical_billing
+version: '1.0.0'
+config-version: 2
+profile: medical_billing
+model-paths: ["models"]
+clean-targets: ["target", "dbt_packages"]
+models:
+  medical_billing:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

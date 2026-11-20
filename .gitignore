@@ -1,0 +1,44 @@
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+!*.env.example
+**/.env
+**/.env.*
+!**/.env.example
+!**/*.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# dbt generated files
+**/target/
+**/dbt_packages/
+**/logs/
+**/.user.yml
+
+# Airflow runtime
+airflow.db
+airflow.cfg
+*.pid
+standalone_admin_password.txt
+simple_auth_manager_passwords.json.generated
+
+# Local backups
+_backups/
+backups/
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.log

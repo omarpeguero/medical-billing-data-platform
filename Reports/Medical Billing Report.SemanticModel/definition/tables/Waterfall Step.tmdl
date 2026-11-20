@@ -1,0 +1,21 @@
+/// Disconnected axis for the charge-to-cash waterfall
+table 'Waterfall Step'
+	lineageTag: 1b986a8b-8e45-4c82-9a14-fcfae398e7c3
+
+	column Step
+		lineageTag: 4651897f-a5ae-4350-a70d-a0049eaae691
+		isNameInferred
+		sourceColumn: [Step]
+		sortByColumn: 'Step Order'
+
+	column 'Step Order'
+		isHidden
+		lineageTag: d4d4b7cd-a470-4295-8a16-811dcdaa9acc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step Order]
+
+	partition 'Waterfall Step' = calculated
+		mode: import
+		source = DATATABLE("Step", STRING, "Step Order", INTEGER, {{"Gross Charges", 1}, {"Contractual Adj.", 2}, {"Write-offs", 3}, {"Insurance Paid", 5}, {"Patient Paid", 6}})
+
