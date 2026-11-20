@@ -40,7 +40,8 @@ with DAG(
         command=[
             "build",
             "--project-dir", "/workspace",
-            "--profiles-dir", "/workspace/config"],
+            "--profiles-dir", "/workspace/config",
+            "--target", "prod"],
         docker_url="unix:///var/run/docker.sock",
         network_mode="bridge",
         mount_tmp_dir=False,
