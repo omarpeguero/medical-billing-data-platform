@@ -609,7 +609,5 @@ def main():
         LOG.error('PostgreSQL error %s: %s',getattr(e,'sqlstate',None),e)
         sys.exit(2)
 
-def intentional_ci_failure(
-
 if __name__=='__main__':
     main()
