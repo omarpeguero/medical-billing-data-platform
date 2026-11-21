@@ -23,3 +23,32 @@ jobs:
           python -m compileall -q medical_billing_simulator.py
           python -m compileall -q medical_billing_airflow/dags
 
+
+
+  dbt-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: install dbt
+        run: pip install dbt-sqlserver==1.12.1
+
+      - name: Verify dbt installation
+        run: dbt --version
+
+      - name: Validate dbt project
+        working-directory: medical_billing_dbt
+        env:
+          SQLSERVER_HOST: localhost
+          SQLSERVER_PORT: "1433"
+          SQLSERVER_DATABASE: MedicalBilling_DW
+          SQLSERVER_USER: ci_user
+          SQLSERVER_PASSWORD: ci_placeholder_password
+        run: dbt parse --target dev --profiles-dir config
