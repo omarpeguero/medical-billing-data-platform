@@ -1,0 +1,25 @@
+name: Medical Billing CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  python-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Validate python syntax
+        run: |
+          python -m compileall -q medical_billing_simulator.py
+          python -m compileall -q medical_billing_airflow/dags
+
