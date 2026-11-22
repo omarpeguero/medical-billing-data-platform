@@ -81,8 +81,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cheout repository
-        uses: actions/checout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
