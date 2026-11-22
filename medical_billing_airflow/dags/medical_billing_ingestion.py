@@ -2,20 +2,19 @@
 
 Requires Airflow's Airbyte and Docker providers, plus a dedicated dbt runner image.
 """
-from datetime import datetime, timedelta, timezone
-from dotenv import dotenv_values
+from datetime import UTC, datetime, timedelta
 
 from airflow import DAG
-from airflow.sdk import literal
 from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
 from airflow.providers.docker.operators.docker import DockerOperator
+from dotenv import dotenv_values
 
 AIRBYTE_CONNECTION_ID = "e8203ef0-0836-41ca-873e-fcee616c22e8"
 
 with DAG(
     dag_id="medical_billing_ingestion",
     description="Incremental EMR ingestion and tested SQL Server dbt warehouse refresh",
-    start_date=datetime(2026, 10, 1, tzinfo=timezone.utc),
+    start_date=datetime(2026, 10, 1, tzinfo=UTC),
     schedule="0 * * * *",
     catchup=False,
     max_active_runs=1,

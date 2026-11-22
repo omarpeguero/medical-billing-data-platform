@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Continuous synthetic medical billing source simulator for the supplied billing DDL.
 
 Usage:
@@ -22,26 +21,26 @@ import logging
 import math
 import os
 import random
-import json
 import re
 import sys
 import time
 from collections import defaultdict
-from datetime import date, datetime, time as dtime, timedelta, timezone
-from decimal import Decimal, ROUND_HALF_UP
+from datetime import UTC, date, datetime, timedelta
+from datetime import time as dtime
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 try:
     import psycopg
-    from psycopg.rows import dict_row
-    from faker import Faker
     from dotenv import load_dotenv
+    from faker import Faker
+    from psycopg.rows import dict_row
 except ImportError as exc:
     raise SystemExit('Install requirements: pip install -r requirements_medical_billing_simulator.txt') from exc
 
 load_dotenv(Path(__file__).with_name('.env'))
 LOG = logging.getLogger('medical-billing-simulator')
-UTC = timezone.utc
+
 CENT = Decimal('0.01')
 
 # Fictional payer entities, relative behavior and collection rates.
@@ -234,7 +233,7 @@ def grow_master_data(cur, fake, rng, now):
 
 
 def make_entries(cur, rng, now, count, refs):
-    payers, services, providers, clients = refs
+    _payers, services, providers, clients = refs
     created = 0
     for seq in range(1, count+1):
         entry = f'SYN-E-{now:%Y%m%d%H}-{seq:05d}'
@@ -292,7 +291,7 @@ def create_claims(cur, rng, now, refs, max_rows=250):
            (f'SYN-CL-{entries[0]["billing_entry_id"]:010d}',client,provider,
             payers[payer[0]],now,now))
         for i,entry in enumerate(entries,1):
-            line_id=insert_returning(cur,"""INSERT INTO billing.claim_lines
+            insert_returning(cur,"""INSERT INTO billing.claim_lines
              (claim_id,billing_entry_id,line_number,billed_amount,line_status)
              VALUES(%s,%s,%s,%s,'submitted') RETURNING claim_line_id""",
              (new_claim_id,entry['billing_entry_id'],i,entry['charge_amount']))
@@ -482,14 +481,13 @@ def progress_non_claim_entries(cur,rng, now):
 
 
 def tick(conn, fake, rng, when, count):
-    with conn.transaction():
-        with conn.cursor() as cur:
-            grow_master_data(cur,fake,rng,when)
-            refs=catalog(cur)
-            created=make_entries(cur,rng,when,count,refs)
-            progress_non_claim_entries(cur,rng,when)
-            claims=create_claims(cur,rng,when,refs)
-            status=work_claims(cur,rng,when)
+    with conn.transaction(), conn.cursor() as cur:
+        grow_master_data(cur,fake,rng,when)
+        refs=catalog(cur)
+        created=make_entries(cur,rng,when,count,refs)
+        progress_non_claim_entries(cur,rng,when)
+        claims=create_claims(cur,rng,when,refs)
+        status=work_claims(cur,rng,when)
     return {'entries':created,'new_claims':claims,**status}
 
 
@@ -580,9 +578,8 @@ def main():
             validate_schema(conn)
             if args.verify:
                 verify(conn); return
-            with conn.transaction():
-                with conn.cursor() as cur:
-                    init_reference(cur,fake,rng)
+            with conn.transaction(), conn.cursor() as cur:
+                init_reference(cur,fake,rng)
             last=backfill(conn,fake,rng,args)
             # Backfill ends yesterday. Resume from observed entries if they are already newer.
             if last.date()<date.today():
