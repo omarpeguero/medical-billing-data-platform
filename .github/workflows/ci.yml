@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      
+
       - name: Validate python syntax
         run: |
           python -m compileall -q medical_billing_simulator.py
@@ -55,7 +55,7 @@ jobs:
 
 
 
-      
+
   python-linting:
     runs-on: ubuntu-latest
 
@@ -74,4 +74,24 @@ jobs:
       - name: Check Python code quality
         run: |
           ruff check medical_billing_simulator.py medical_billing_airflow/dags/
-          
+
+
+
+  sql-linting:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cheout repository
+        uses: actions/checout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install SQLFluff
+        run: pip install sqlfluff==4.5.0
+
+      - name: Check dbt SQL quality
+        working-directory: medical_billing_dbt
+        run: sqlfluff lint models/ --templater jinja
