@@ -52,3 +52,26 @@ jobs:
           SQLSERVER_USER: ci_user
           SQLSERVER_PASSWORD: ci_placeholder_password
         run: dbt parse --target dev --profiles-dir config
+
+
+
+      
+  python-linting:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Ruff
+        run: pip install ruff==0.17.6
+
+      - name: Check Python code quality
+        run: |
+          ruff check medical_billing_simulator.py medical_billing_airflow/dags/
+          
