@@ -4,7 +4,7 @@ select
     cast(adjustment_date as date) as adjustment_date,
     posted_at,
     adjustment_type,
-    cast(amount as decimal(18,2)) as amount,
+    cast(amount as decimal(18, 2)) as amount,
     adjustment_group_code,
     adjustment_reason_code,
     description,
