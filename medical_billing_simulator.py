@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Continuous synthetic medical billing source simulator for the supplied billing DDL.
 
 Usage:
