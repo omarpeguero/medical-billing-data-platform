@@ -12,6 +12,7 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "True"
       AIRFLOW__LOGGING__LOGGING_LEVEL: INFO
+      DBT_IMAGE: ${DBT_IMAGE:?DBT_IMAGE must be configured}
     volumes:
       - airflow_data:/opt/airflow
       - ./dags:/opt/airflow/dags
