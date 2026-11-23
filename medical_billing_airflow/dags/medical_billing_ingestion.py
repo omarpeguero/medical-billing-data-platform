@@ -2,6 +2,7 @@
 
 Requires Airflow's Airbyte and Docker providers, plus a dedicated dbt runner image.
 """
+import os
 from datetime import UTC, datetime, timedelta
 
 from airflow import DAG
@@ -35,7 +36,7 @@ with DAG(
 
     build_and_test_warehouse = DockerOperator(
         task_id="dbt_build_and_test",
-        image="medical-billing-dbt:runner",
+        image=os.environ["DBT_IMAGE"],
         command=[
             "build",
             "--project-dir", "/workspace",
