@@ -1,0 +1,4 @@
+{
+  "environment": "local",
+  "image": "ghcr.io/omarpeguero/medical-billing-dbt:sha-7af683418c609f4da4c66c511cbb5c2eed2db9f1"
+}
