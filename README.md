@@ -32,7 +32,7 @@ flowchart LR
 ## How the pipeline runs
 
 1. **Python and PostgreSQL** generate and store synthetic reference data and operational activity across 10 tables. The simulator runs as a separate process, with historical seeding and accelerated billing activity.
-2. **Airbyte** replicates the PostgreSQL streams to SQL Server. dbt expects the 10 landed relations in `MedicalBilling_DW.raw`. Airbyte provisioning and replication mode are configured externally.
+2. **Airbyte** replicates the PostgreSQL streams to SQL Server using Xmin update detection and Incremental | Append + Deduped. dbt expects the 10 landed relations in `MedicalBilling_DW.raw`. [Airbyte setup guide](docs/airbyte-setup.md)
 3. **Airflow** triggers the Airbyte job and waits for success. It then starts a Docker runner using `DBT_IMAGE` and executes `dbt build --target prod`. The DAG runs hourly in UTC when unpaused, with catchup disabled and one active run at a time.
 4. **dbt Core and SQL Server** normalize active rows in 10 staging views, calculate shared business logic in three intermediate views, and build five dimension tables and five incremental facts.
 5. **Power BI** imports the `dw` tables from SQL Server. Refresh the report in Desktop after a successful build. The DAG ends with dbt, so report refresh is a separate operation.
@@ -74,7 +74,7 @@ Use Python 3.11+, a dedicated PostgreSQL 14+ database, Docker Desktop, a reachab
    .\.venv\Scripts\python.exe medical_billing_simulator.py --verify
    ```
 
-2. Create the `MedicalBilling_DW` database in SQL Server. Manually configure the PostgreSQL source and SQL Server destination in Airbyte, including their endpoints and credentials. Select all 10 streams from the PostgreSQL `billing` schema and configure the destination mapping shown below. Choose the replication mode for your installation. The active mode remains unverified. Run an initial sync before building dbt.
+2. Create the `MedicalBilling_DW` database in SQL Server and follow the [Airbyte setup guide](docs/airbyte-setup.md) to recreate the source, destination, and sync connection. Select all 10 streams from the PostgreSQL `billing` schema and confirm the destination mapping shown below. Run an initial sync before building dbt.
 
    | PostgreSQL stream | Expected SQL Server table |
    | --- | --- |
@@ -121,7 +121,7 @@ GitHub Actions validates pull requests to `main` with Python syntax and Ruff che
 | --- | --- |
 | Implemented in this repository | Synthetic source and DDL, dbt warehouse and tests, Airflow DAG, Power BI report and semantic model, GitHub Actions workflows, and local deployment scripts |
 | Requires external configuration | Database instances and credentials, Airbyte connections and stream settings, Docker and registry access, and Power BI credentials and refresh. Windows Task Scheduler polling is disabled by preference. |
-| Future enhancements | Version-controlled Airbyte setup, database-backed integration CI, digest-pinned releases, and scheduled report refresh |
+| Future enhancements | Automated Airbyte provisioning, database-backed integration CI, digest-pinned releases, and scheduled report refresh |
 
 ## Repository map
 
