@@ -1,9 +1,10 @@
-
 param(
     [Parameter(Mandatory = $true)]
     [string]$Image,
 
-    [switch]$SimulateFailure
+    [switch]$SimulateFailure,
+
+    [switch]$LockAlreadyHeld
 )
 
 $ErrorActionPreference = "Stop"
