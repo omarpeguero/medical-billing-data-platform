@@ -35,7 +35,7 @@ Treat each SHA tag as immutable in the release process. These references are reg
 
 ## Deploy on Windows
 
-Start Docker Desktop and initialize the Airflow stack using the [local setup](../README.md#local-setup). The scripts expect an existing `medical_billing_airflow` container, an ignored `medical_billing_airflow/.env` with a matching `DBT_IMAGE`, a dbt connection environment file, and permission to pull from GHCR. Authenticate to the registry if the package requires it. From the repository root:
+Start Docker Desktop and initialize the Airflow stack using the [local setup](../README.md#local-setup). The scripts expect an existing `medical_billing_airflow` container, an ignored `medical_billing_airflow/.env` with a matching `DBT_IMAGE` and the required `AIRBYTE_CONNECTION_ID`, a dbt connection environment file, and permission to pull from GHCR. Authenticate to the registry if the package requires it. From the repository root:
 
 ```powershell
 .\deployment\check-deployment.ps1 -DryRun

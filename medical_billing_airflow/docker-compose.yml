@@ -13,6 +13,7 @@ services:
       AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "True"
       AIRFLOW__LOGGING__LOGGING_LEVEL: INFO
       DBT_IMAGE: ${DBT_IMAGE:?DBT_IMAGE must be configured}
+      AIRBYTE_CONNECTION_ID: ${AIRBYTE_CONNECTION_ID:?AIRBYTE_CONNECTION_ID must be set to the Airbyte sync connection UUID}
     volumes:
       - airflow_data:/opt/airflow
       - ./dags:/opt/airflow/dags
