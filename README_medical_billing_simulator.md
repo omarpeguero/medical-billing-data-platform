@@ -14,7 +14,7 @@ This simulator populates **your existing PostgreSQL `EMR_source`** database unde
    pip install -r requirements_medical_billing_simulator.txt
    ```
 
-3. Copy `.env.medical_billing.example` to `.env` **in the same folder as** `medical_billing_simulator.py`. Edit `PGUSER`, `PGPASSWORD`, etc. Example:
+3. Create an ignored `.env` **in the same folder as** `medical_billing_simulator.py` and set your PostgreSQL connection values:
 
    ```ini
    PGHOST=localhost
@@ -60,10 +60,9 @@ Only one simulator process should run against a given database. Initial historic
 ### Airbyte replication
 
 - PostgreSQL source: host where PG runs, `billing` schema, all 10 tables.
-- Azure SQL destination: configure with the supported connector version. Verify destination features before relying on CDC.
-- Prefer **CDC** using PostgreSQL's WAL when feasible, since this captures inserts and updates; otherwise configure supported incremental cursors using `updated_at`, noting that this cannot represent deletes and may have timestamp tie/late-event limitations depending on connector behavior.
-- Airbyte's PostgreSQL source may require WAL configuration, replication privileges, and network access. This isn't configured by the Python script.
-- For Airflow, run this generator as a separate persistent process or service. Airflow should orchestrate ingestion, dbt transformations and tests; it does not need to own the continuously running source application.
+- SQL Server destination: the dbt source expects all 10 streams under `MedicalBilling_DW.raw`. Confirm the landed relations match the [dbt source and staging definitions](medical_billing_dbt/models/staging).
+- Airbyte's replication mode is configured outside the repository. The PostgreSQL schema maintains `updated_at` for cursor-based incremental syncs. Such cursors have timestamp tie and late-event limitations and cannot represent physical deletes. PostgreSQL WAL-based CDC would require connector setup, replication privileges, and network access.
+- Run the generator as a separate persistent process. The [Airflow DAG](medical_billing_airflow/dags/medical_billing_ingestion.py) triggers the configured Airbyte sync, waits for completion, and runs the dbt models and tests.
 
 ### Validation SQL (run in pgAdmin)
 
