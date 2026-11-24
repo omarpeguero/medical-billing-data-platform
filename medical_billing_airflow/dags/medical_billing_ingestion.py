@@ -10,7 +10,9 @@ from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperat
 from airflow.providers.docker.operators.docker import DockerOperator
 from dotenv import dotenv_values
 
-AIRBYTE_CONNECTION_ID = "e8203ef0-0836-41ca-873e-fcee616c22e8"
+AIRBYTE_CONNECTION_ID = os.environ.get("AIRBYTE_CONNECTION_ID", "").strip()
+if not AIRBYTE_CONNECTION_ID:
+    raise RuntimeError("AIRBYTE_CONNECTION_ID must be set to the UUID of the Airbyte sync connection.")
 
 with DAG(
     dag_id="medical_billing_ingestion",
