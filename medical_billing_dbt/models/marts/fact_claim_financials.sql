@@ -92,11 +92,21 @@ cross apply
         or (
             prior_line.claim_line_id is not null
             and exists (
-                select f.total_paid, f.insurance_paid, f.patient_paid, f.payment_transaction_count,
-                       f.first_payment_date, f.last_payment_date
+                select
+                    f.total_paid,
+                    f.insurance_paid,
+                    f.patient_paid,
+                    f.payment_transaction_count,
+                    f.first_payment_date,
+                    f.last_payment_date
                 except
-                select prior_line.total_paid, prior_line.insurance_paid, prior_line.patient_paid,
-                       prior_line.payment_transaction_count, prior_line.first_payment_date, prior_line.last_payment_date
+                select
+                    prior_line.total_paid,
+                    prior_line.insurance_paid,
+                    prior_line.patient_paid,
+                    prior_line.payment_transaction_count,
+                    prior_line.first_payment_date,
+                    prior_line.last_payment_date
             )
         )
     )
