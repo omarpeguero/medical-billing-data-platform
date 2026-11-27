@@ -24,6 +24,7 @@ select
     p.payment_source,
     p.transaction_type,
     p.amount,
+    p.is_deleted,
     p.reference_number,
     p.original_payment_id,
     p.created_at,
@@ -41,6 +42,7 @@ cross apply
         from (values (p.updated_at), (cl.updated_at), (c.updated_at), (be.updated_at)) as x(val)
     ) as changes
 {% if is_incremental() %}
+    left join {{ this }} as prior_payment on p.payment_id = prior_payment.payment_id
     cross join
         (
             select
@@ -54,5 +56,8 @@ cross apply
         or cl.updated_at >= watermark.cutoff_at
         or c.updated_at >= watermark.cutoff_at
         or be.updated_at >= watermark.cutoff_at
+        -- Reconcile landed deletion flags even when the source timestamp is outside the lookback.
+        or p.is_deleted <> prior_payment.is_deleted
+        or (p.is_deleted = 1 and prior_payment.is_deleted is null)
     )
 {% endif %}

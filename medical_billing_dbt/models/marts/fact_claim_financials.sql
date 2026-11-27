@@ -67,6 +67,7 @@ cross apply
             ) as x(val)
     ) as changes
 {% if is_incremental() %}
+    left join {{ this }} as prior_line on f.claim_line_id = prior_line.claim_line_id
     cross join
         (
             select
@@ -86,6 +87,17 @@ cross apply
         or exists (
             select 1 from {{ ref('stg_adjustments') }} as a
             where a.claim_line_id = cl.claim_line_id and a.updated_at >= watermark.cutoff_at
+        )
+        -- Compare active payment results directly, including dates that clear on the last deletion.
+        or (
+            prior_line.claim_line_id is not null
+            and exists (
+                select f.total_paid, f.insurance_paid, f.patient_paid, f.payment_transaction_count,
+                       f.first_payment_date, f.last_payment_date
+                except
+                select prior_line.total_paid, prior_line.insurance_paid, prior_line.patient_paid,
+                       prior_line.payment_transaction_count, prior_line.first_payment_date, prior_line.last_payment_date
+            )
         )
     )
 {% endif %}

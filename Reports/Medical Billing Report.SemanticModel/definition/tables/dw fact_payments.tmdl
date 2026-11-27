@@ -192,9 +192,11 @@ table 'dw fact_payments'
 		source =
 				let
 				    Source = Sql.Database("localhost", "MedicalBilling_DW"),
-				    dw_fact_payments = Source{[Schema="dw",Item="fact_payments"]}[Data]
+				    dw_fact_payments = Source{[Schema="dw",Item="fact_payments"]}[Data],
+				    ActivePayments = Table.SelectRows(dw_fact_payments, each [is_deleted] = false),
+				    PaymentColumns = Table.RemoveColumns(ActivePayments, {"is_deleted"})
 				in
-				    dw_fact_payments
+				    PaymentColumns
 
 	annotation PBI_ResultType = Table
 
