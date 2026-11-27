@@ -10,6 +10,6 @@ select
     reference_number,
     original_payment_id,
     created_at,
-    updated_at
+    updated_at,
+    cast(is_deleted as bit) as is_deleted
 from {{ source('emr', 'payments') }}
-where is_deleted = 0

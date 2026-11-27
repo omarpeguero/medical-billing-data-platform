@@ -12,6 +12,7 @@ with payment_totals as (
         min(payment_date) as first_payment_date,
         max(payment_date) as last_payment_date
     from {{ ref('stg_payments') }}
+    where is_deleted = 0
     group by claim_line_id
 ),
 
